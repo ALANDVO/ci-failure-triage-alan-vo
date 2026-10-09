@@ -1,0 +1,28 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file: .env
+    environment:
+      APP_ENV: production
+      AUTH_MODE: oidc
+      COOKIE_SECURE: "true"
+      BIND_HOST: 0.0.0.0
+      DATABASE_PATH: /data/triage.db
+    volumes:
+      - triage-data:/data
+    expose: ["8000"]
+    restart: unless-stopped
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "127.0.0.1:8090:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+volumes:
+  triage-data:

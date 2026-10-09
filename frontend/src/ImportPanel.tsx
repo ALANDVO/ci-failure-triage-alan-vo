@@ -1,0 +1,13 @@
+import {useState} from 'react';
+import {request} from './api';
+export const exampleRun={external_id:'build-101',attempt:1,repository:'example/payments',workflow:'CI',branch:'main',commit:'a'.repeat(40),started_at:'2026-01-01T10:00:00Z',jobs:[{name:'unit-tests',test:'checkout retries',status:'failure',duration_seconds:180,log:'2026-01-01T10:00:02Z Error: connection timed out after 200ms'}]};
+export function ImportPanel({onImported}:{onImported:()=>void}){
+ const [text,setText]=useState(JSON.stringify(exampleRun,null,2));const [busy,setBusy]=useState(false);const [error,setError]=useState('');const [result,setResult]=useState('');
+ async function submit(){setBusy(true);setError('');setResult('');try{const result=await request<{id:string;replayed:boolean}>('/api/runs','POST',JSON.parse(text));setResult(result.replayed?'Identical run already retained; no duplicate created.':`Imported run ${result.id}.`);onImported();}catch(e){setError((e as Error).message);}finally{setBusy(false);}}
+ return <section className="panel"><h2>Import a CI run</h2><p>Paste the vendor-neutral JSON record below. Each attempt must have a unique external ID and attempt number within its repository and workflow. Include successful attempts too; they provide the comparison needed for flakiness candidates.</p>
+ <div className="notice">Review logs for secrets before import. Redaction is best effort. The server stores only bounded redacted excerpts and a SHA-256 digest; original logs are discarded after analysis.</div>
+ <label>Run JSON<textarea className="code" rows={19} value={text} onChange={e=>setText(e.target.value)} spellCheck={false}/></label>
+ <div className="actions"><button onClick={submit} disabled={busy}>{busy?'Importing…':'Import run'}</button><button className="secondary" onClick={()=>setText(JSON.stringify(exampleRun,null,2))}>Load example</button><label className="file">Read JSON file<input type="file" accept=".json,application/json" onChange={async e=>{const file=e.target.files?.[0];if(!file)return;if(file.size>2_000_000){setError('File exceeds 2 MB');return;}setText(await file.text());}}/></label></div>
+ {error&&<p role="alert" className="error">{error}</p>}{result&&<p role="status" className="success">{result}</p>}
+ <details><summary>Import contract and limits</summary><ul><li>Up to 100 unique job/test pairs per run and 500 runs per workspace.</li><li>Status: success, failure, cancelled or skipped. Duration: 0–86,400 seconds.</li><li>Logs: 100,000 characters per job, one million combined per run.</li><li>Commit: 7–64 hexadecimal characters. Use full hashes to avoid collisions.</li><li>started_at must contain a timezone. Identical replays are harmless; conflicting content returns 409.</li></ul></details></section>;
+}

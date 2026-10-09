@@ -1,0 +1,13 @@
+{
+  "name": "ci-failure-triage-alan-vo",
+  "owner": "ALANDVO",
+  "email": "alanvo@gmail.com",
+  "domain": "devops",
+  "version": "1.0.0",
+  "summary": "Import CI logs, fingerprint failure signatures, investigate same-commit mixed outcomes, and prioritize auditable remediation using measured job time and explicit investigation estimates.",
+  "workflows": [
+    "Import bounded CI runs with replay protection and redacted evidence",
+    "Inspect and assign failure groups with optimistic revisions and audit history",
+    "Compare samples, evaluate normalization, and export prioritized remediation reports"
+  ]
+}
