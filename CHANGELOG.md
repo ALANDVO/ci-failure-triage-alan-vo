@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.1] - 2026-10-09
+
+- Correct the browser page description to describe CI failure triage and keep the API version aligned with the patch release.
+
 ## [1.0.0] - 2026-10-09
 
 ## 1.0.0

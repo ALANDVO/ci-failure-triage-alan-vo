@@ -1,6 +1,6 @@
 # CI Failure Triage — Alan Vo
 
-Current version: `1.0.0`.
+Current version: `1.0.1`.
 
 Import CI run records, inspect normalized failure signatures, identify same-commit mixed outcomes, and manage remediation with evidence and a human audit trail. This is a deployable FastAPI/React workspace for teams whose CI dashboard says *failed* but does not explain which failures deserve attention first.
 
