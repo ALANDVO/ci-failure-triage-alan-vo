@@ -24,7 +24,7 @@ def create_app(settings:Settings|None=None,oidc_transport=None,llm_transport=Non
         db=Database(settings.database_path);app.state.db=db;app.state.triage=TriageService(db)
         try:yield
         finally:db.close()
-    app=FastAPI(title='CI Failure Triage — Alan Vo',version='1.0.0',lifespan=lifespan)
+    app=FastAPI(title='CI Failure Triage — Alan Vo',version='1.0.1',lifespan=lifespan)
     app.state.settings=settings;app.state.oidc=OIDCClient(settings,oidc_transport)
     app.state.advice=AdviceService(settings,llm_transport)
     app.add_middleware(BodyLimit,limit=settings.max_upload_bytes)
@@ -41,7 +41,7 @@ def create_app(settings:Settings|None=None,oidc_transport=None,llm_transport=Non
     def service(request):return request.app.state.triage
     def actor(request,role='viewer'):return authorize(request,role)['subject']
     @app.get('/api/health')
-    def health():return {'status':'ok','version':'1.0.0'}
+    def health():return {'status':'ok','version':'1.0.1'}
     @app.get('/api/runs')
     def runs(request:Request,repository:str=Query('',max_length=160),branch:str=Query('',max_length=160)):
         actor(request);return [{k:v for k,v in r.items() if k!='jobs'}|{'job_count':len(r['jobs'])} for r in service(request).runs(repository,branch)]
