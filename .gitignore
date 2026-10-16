@@ -20,4 +20,7 @@ data/
 coverage/
 playwright-report/
 test-results/
+*.sqlite
+.antigravitycli/
+.omp/
 .portfolio-*
