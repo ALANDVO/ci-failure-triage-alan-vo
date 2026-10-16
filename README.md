@@ -1,8 +1,11 @@
-# CI Failure Triage — Alan Vo
+# CI Failure Triage — Alan Vo | AI & Machine Learning
 
-Current version: `1.0.1`.
+> Work in progress. This checkpoint may be incomplete or fail tests. See PLAN.md and STATUS.md before use.
 
-Import CI run records, inspect normalized failure signatures, identify same-commit mixed outcomes, and manage remediation with evidence and a human audit trail. This is a deployable FastAPI/React workspace for teams whose CI dashboard says *failed* but does not explain which failures deserve attention first.
+
+Current version: `1.1.0`.
+
+Import CI run records, fingerprint failure signatures through deterministic log normalization, detect same-commit mixed outcomes as flakiness candidates with Wilson 95% confidence intervals, and rank remediation by measured failed-job duration plus an explicit investigation-time estimate. The core engine works fully offline; optional model advice requires explicit consent and is grounded in retained quotes. Intended for CI/DevOps engineers who need to decide which of many failing jobs deserves investigation first.
 
 The app does not scrape CI vendors, run imported commands, modify repositories, retry builds, or claim to know a failure's root cause. Bring JSON records from your existing CI exporter. Retained evidence remains useful without an LLM account.
 
@@ -153,7 +156,47 @@ Interactive schema: `/docs`; machine-readable schema: `/openapi.json`. Authentic
 
 Triage statuses: new, investigating, resolved, ignored. Every mutation requires a substantive note, and states other than new require an owner. Initial revision is 0; saving increments it. A stale revision returns 409. Domain errors use `{"error":{"code":"...","message":"..."}}`; schema validation uses FastAPI's 422 `detail` response. No error response includes provider credentials or upstream response bodies.
 
-## AI/ML evaluation and tests
+## AI/ML evaluation
+
+The deterministic core is a log normalizer that collapses known volatile substrings (timestamps, clock prefixes, UUIDs, memory addresses, source-line positions, explicit durations) while preserving semantic error codes, assertion values, exception classes, and resource names. It runs fully offline with no model key required.
+
+### Data provenance and reproducible command
+
+All twelve evaluation pairs are handwritten fixtures in `backend/app/services/evaluation.py` — no external dataset is scraped or downloaded. Each pair is annotated with an expected `same` outcome based on whether volatility normalization should collapse the two lines.
+
+```sh
+PYTHONPATH=backend .venv/bin/python -m app.services.evaluation
+```
+
+### Baseline and measured results
+
+The baseline is the hand-annotated `expected_same` flag for each pair. The actual result is whether `normalize(left) == normalize(right)`. All twelve cases pass:
+
+| Case | Expected same | Result |
+|---|---|---|
+| Source line volatility | true | ✓ |
+| Elapsed duration | true | ✓ |
+| HTTP codes retained | false | ✓ |
+| Numeric assertions retained | false | ✓ |
+| Memory addresses | true | ✓ |
+| Failure semantics | false | ✓ |
+| Timestamps | true | ✓ |
+| Exception classes | false | ✓ |
+| Clock prefixes | true | ✓ |
+| Resource names | false | ✓ |
+| Exit codes | false | ✓ |
+| TypeScript positions | true | ✓ |
+
+### Failure cases and limitations
+
+- **Last-error heuristic**: the signature uses the last recognized error line. A later informational line containing "error" can shift grouping away from the actual root cause. The system never infers root cause.
+- **Semantic scope mismatch**: "permission denied" vs "connection denied" stay distinct by design; "file not found" vs "directory not found" would also stay distinct even with shared remediation. Normalization does not understand file-system semantics.
+- **No calibration**: fixtures are regression evidence, not a calibrated flakiness predictor. Wilson 95% intervals describe observed binomial counts, not true flake rates.
+- **Optional LLM advice**: when an operator configures `LLM_API_KEY`, the model receives at most ten groups with two excerpts each and must cite an exact retained quote. The model is never trusted unsupervised — every suggestion is validated against stored excerpts before display, and recommendations never execute or modify triage state. Provider failure returns a safe 502 while deterministic analysis and saved triage remain intact.
+
+### Tests
+
+Backend tests exercise conflicting replays, concurrent imports, mixed-outcome scope, human revision conflicts, redaction, retention, exports, role/CSRF enforcement, and signed OIDC flows. Frontend tests cover imports, conflicts, read-only state, and explicit model consent. CI runs backend tests, TypeScript build, frontend tests, and both Docker builds.
 
 ```sh
 .venv/bin/python -m pytest backend/tests -q
@@ -161,8 +204,6 @@ cd frontend
 npm run build
 npm test -- --run
 ```
-
-The evaluation endpoint exposes all 12 labeled normalization pairs and their expected/actual outcomes. It checks preservation of semantic values and removal of known volatility. This tiny handwritten fixture set is regression evidence, not broad NLP accuracy. Backend tests exercise conflicting replays, concurrent imports, mixed-outcome scope, human revision conflicts, redaction, retention, exports, role/CSRF enforcement, and signed OIDC flows. Frontend tests cover imports, conflicts, read-only state and explicit model consent. CI runs backend tests, TypeScript build/frontend tests, and both Docker builds.
 
 ## Ownership
 
