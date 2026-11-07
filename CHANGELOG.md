@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.3.0 — work-in-progress checkpoint
+## 1.4.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
+
+## 1.3.0 — 2026-11-07
+- Fix version metadata consistency: backend reads version from VERSION file, health endpoint reflects VERSION value, Docker image copies VERSION file
+- Update README version from 1.1.0 to 1.3.0 to match VERSION file
 
 ## 1.2.0 — work-in-progress checkpoint
 

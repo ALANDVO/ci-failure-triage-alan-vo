@@ -26,7 +26,7 @@ Status: done
 
 Acceptance:
 - backend/app/main.py reads version from VERSION file via _load_version()
-- VERSION file exists and contains 1.1.0
+- VERSION file exists and contains 1.3.0
 - FastAPI app version and health endpoint reflect VERSION file value
 - Docker image copies VERSION file
 
