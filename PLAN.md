@@ -34,3 +34,6 @@ Implementation: `backend/app/main.py`, `backend/Dockerfile`, `VERSION`
 
 Tests: `backend/tests/test_triage.py`
 
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)

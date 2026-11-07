@@ -37,3 +37,7 @@ Partial code published for continued development. Known issues: STATUS.md.
 - Assign triage owners and statuses with revision conflicts, automatic recurrence reopening, and retained audit events.
 - Compare time samples, export JSON/CSV/Markdown, and validate optional model advice against retained evidence.
 - Provide OIDC PKCE SSO, server-side sessions, role checks, CSRF protection, Docker deployment and regression diagnostics.
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)

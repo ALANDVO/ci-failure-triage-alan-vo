@@ -208,3 +208,7 @@ npm test -- --run
 ## Ownership
 
 Alan Vo · [alanvo@gmail.com](mailto:alanvo@gmail.com) · MIT license.
+
+---
+
+Alan Vo · [alanvo.net](https://alanvo.net)
