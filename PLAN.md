@@ -4,7 +4,7 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-version-metadata-consistency
+frontend-group-panel-fix
 
 ## Roadmap
 
@@ -33,6 +33,20 @@ Acceptance:
 Implementation: `backend/app/main.py`, `backend/Dockerfile`, `VERSION`
 
 Tests: `backend/tests/test_triage.py`
+
+### frontend-group-panel-fix — Fix GroupPanel rendering in board tab
+
+Status: done
+
+Acceptance:
+- Board tab lists all failure groups as clickable items
+- Clicking a group opens GroupPanel detail view with correct props (group, editable, onSaved, onClose)
+- Closing the panel clears selection and returns to list view
+- TypeScript build passes without errors
+
+Implementation: `frontend/src/App.tsx`
+
+Tests: `frontend/src/workflows.test.tsx`, `npm run build`
 
 ---
 

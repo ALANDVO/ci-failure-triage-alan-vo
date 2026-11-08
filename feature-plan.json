@@ -1,6 +1,6 @@
 {
     "schema_version": 1,
-    "current_feature": "version-metadata-consistency",
+    "current_feature": "frontend-group-panel-fix",
     "features": [
         {
             "id": "portfolio-baseline-completion",
@@ -36,7 +36,25 @@
             "tests": [
                 "backend/tests/test_triage.py"
             ]
+        },
+        {
+            "id": "frontend-group-panel-fix",
+            "title": "Fix GroupPanel rendering in board tab",
+            "status": "done",
+            "acceptance": [
+                "Board tab lists all failure groups as clickable items",
+                "Clicking a group opens GroupPanel detail view with correct props (group, editable, onSaved, onClose)",
+                "Closing the panel clears selection and returns to list view",
+                "TypeScript build passes without errors"
+            ],
+            "implementation": [
+                "frontend/src/App.tsx"
+            ],
+            "tests": [
+                "frontend/src/workflows.test.tsx",
+                "npm run build"
+            ]
         }
     ],
-    "last_completed": "version-metadata-consistency"
+    "last_completed": "frontend-group-panel-fix"
 }
