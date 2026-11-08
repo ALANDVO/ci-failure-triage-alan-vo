@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
+## 1.4.1 — 2026-11-08
+- Fix frontend GroupPanel rendering: board tab now lists failure groups and opens selected group detail panel correctly (was passing all groups to single panel)
+
 ## 1.4.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
