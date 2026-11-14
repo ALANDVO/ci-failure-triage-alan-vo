@@ -4,7 +4,7 @@
   "owner": "ALANDVO",
   "email": "alanvo@gmail.com",
   "domain": "devops",
-  "version": "1.2.0",
+  "version": "1.6.0",
   "summary": "Work in progress: ci-failure-triage-alan-vo",
   "workflows": [
     "Import bounded CI runs with replay protection and redacted evidence",

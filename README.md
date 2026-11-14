@@ -3,7 +3,7 @@
 > Work in progress. This checkpoint may be incomplete or fail tests. See PLAN.md and STATUS.md before use.
 
 
-Current version: `1.4.0`.
+Current version: `1.6.0`.
 
 Import CI run records, fingerprint failure signatures through deterministic log normalization, detect same-commit mixed outcomes as flakiness candidates with Wilson 95% confidence intervals, and rank remediation by measured failed-job duration plus an explicit investigation-time estimate. The core engine works fully offline; optional model advice requires explicit consent and is grounded in retained quotes. Intended for CI/DevOps engineers who need to decide which of many failing jobs deserves investigation first.
 
